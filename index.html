@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A-Frame Video Toggle avec Tableau</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script>
+      AFRAME.registerComponent('toggleclick', {
+        init: function () {
+          this.onClick = this.onClick.bind(this);
+          this.el.addEventListener('click', this.onClick);
+        },
+
+        onClick: async function () {
+          let mediaEl = document.querySelector(this.el.getAttribute('src'));
+
+          if (mediaEl) {
+            // Basculer la visibilité de l'élément
+            this.el.object3D.visible = !this.el.object3D.visible;
+
+            // Contrôler la lecture en fonction de la visibilité
+            if (this.el.object3D.visible) {
+              // Assurer que c'est un élément vidéo avant de jouer
+              if (mediaEl.tagName === 'VIDEO') {
+                mediaEl.play();
+              }
+            } else {
+              if (mediaEl.tagName === 'VIDEO') {
+                mediaEl.pause();
+                mediaEl.currentTime = 0; // Remettre à zéro le temps pour redémarrer
+              }
+            }
+          } else {
+            console.warn('Elément source non trouvé :', this.el.getAttribute('src'));
+          }
+        },
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <!-- Tableau noir -->
+      <a-plane color="#333" width="4" height="2" position="0 2 -5" rotation="-90 0 0">
+        <!-- Texte sur le tableau -->
+        <a-text value="Cliquez ici" color="white" align="center" position="0 0 0.1" scale="3 3 3"></a-text>
+      </a-plane>
+
+      <!-- Boîte qui déclenche l'action -->
+      <a-box toggleclick src="#skibidi.mp4" position="0 1 -3"></a-box>
+
+      <!-- Vidéo locale cachée dans la scène -->
+      <video id="my-video" src="skibidi.mp4" preload="auto" style="display: none"></video>
+    </a-scene>
+  </body>
+</html>
