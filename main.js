@@ -638,4 +638,4 @@ if(scene) {
   scene.addEventListener("loaded", function() {
     OnVRChange()
   })
-}
+} 
